@@ -7,7 +7,7 @@ import sys
 
 def queryBIDB(query):
     # Connect to RedShift
-    conn_string = "dbname='dev' port='5439' user='matrix' password='Th3r3!sN0Sp00n' host='matrix-bi.ck2h68yqtpzh.eu-west-1.redshift.amazonaws.com'";
+    conn_string = ""
     print "Connecting to database\n        ->%s" % (conn_string)
     conn = psycopg2.connect(conn_string);
     cursor = conn.cursor();
@@ -23,8 +23,8 @@ def queryBIDB(query):
 def queryAppsDB(query):
     config = {
         'user': 'appsdb_ro',
-        'password': 'KbBqbVe18e',
-        'host': 'tt-db-prod.c1ejtvimm1e1.us-east-1.rds.amazonaws.com',
+        'password': '',
+        'host': '',
         'database': 'TabTale_DB',
         'raise_on_warnings': True,
     }
