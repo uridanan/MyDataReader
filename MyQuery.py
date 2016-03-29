@@ -1,3 +1,4 @@
+from collections import defaultdict
 
 class MyQuery:
     query = ""
@@ -22,3 +23,15 @@ class MyQuery:
 
     def getResult(self):
         return self.result
+
+    def getDataMap(self,keyIndex):
+         #creating a dict of dicts
+        datamap = defaultdict(dict)
+        c = 0
+        for col in self.columns:
+            datamap[col] = defaultdict
+            for row in self.result:
+                values = row.split(',')
+                key = values[keyIndex]
+                datamap[col][key] = values[c]
+            c += 1
