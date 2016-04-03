@@ -1,4 +1,9 @@
-class MyDB:
+from abc import ABCMeta, abstractmethod
+
+
+class MyDB(object):
+
+    __metaclass__=ABCMeta
     host = ""
     port = ""
     db = ""
@@ -14,23 +19,16 @@ class MyDB:
         self.user = u
         self.pswd = pwd
 
+    @abstractmethod
     def getConnectionString(self):
         pass
 
+    @abstractmethod
     def connect(self):
         pass
 
     def getConnection(self):
         return self.cnx
 
-    def getCursor(self):
-        return self.cursor
-
     def closeCnx(self):
         self.cnx.close()
-
-    def closeCursor(self):
-        self.cursor.close()
-
-
-

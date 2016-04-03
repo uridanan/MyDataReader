@@ -26,12 +26,15 @@ class MyQuery:
 
     def getDataMap(self,keyIndex):
          #creating a dict of dicts
-        datamap = defaultdict(dict)
+        datamap = dict()
         c = 0
         for col in self.columns:
-            datamap[col] = defaultdict
+            datamap[col] = dict()
             for row in self.result:
-                values = row.split(',')
+                #values = row.split(',')
+                values = row
                 key = values[keyIndex]
-                datamap[col][key] = values[c]
+                value = values[c]
+                datamap[col][key] = value
             c += 1
+        return datamap

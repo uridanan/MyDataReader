@@ -1,5 +1,6 @@
-import mysql.connector
-from mysql.connector import errorcode
+from MySQLDB import MySQLDB
+from MySqlFile import MySqlFile
+from MyQuery import MyQuery
 
 import psycopg2
 import csv
@@ -20,51 +21,38 @@ def queryBIDB(query):
     conn.close()
 
 
-def queryAppsDB(query):
-    config = {
-        'user': 'appsdb_ro',
-        'password': '',
-        'host': '',
-        'database': 'TabTale_DB',
-        'raise_on_warnings': True,
-    }
-    try:
-        cnx = mysql.connector.connect(**config)
-    except mysql.connector.Error as err:
-        if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
-            print("Something is wrong with your user name or password")
-        elif err.errno == errorcode.ER_BAD_DB_ERROR:
-            print("Database does not exist")
-        else:
-            print(err)
-    else:
-        cursor = cnx.cursor()
-        cursor.execute(query)
-        result = cursor.fetchall()
-        cursor.close()
-        print("Close cursor")
-        cnx.close()
-        print("Close cnx")
-        return result;
+def queryAppsDB():
 
-def loadSqlFromFile(filename):
-    # Open and read the file as a single buffer
-    fd = open(filename, 'r')
-    sqlFile = fd.read()
-    fd.close()
+    #Get connection to the DB
+    appsDB = MySQLDB('tt-db-prod.c1ejtvimm1e1.us-east-1.rds.amazonaws.com',
+                     '',
+                     'TabTale_DB',
+                     'appsdb_ro',
+                     'KbBqbVe18e',
+                     )
+    if appsDB.connect() == False:
+        return
 
-    # all SQL commands (split on ';')
-    sqlCommands = sqlFile.split(';')
+    #Load query from file
+    script = MySqlFile("kpiAppsFromAppsDB.sql")
+    script.load()
+    queryString = script.getCommand(0)
 
-    return sqlCommands;
+    #Run query
+    query = MyQuery(queryString)
+    query.run(appsDB.getConnection())
 
-def runAppsDBQuery():
-    sqlCommands = loadSqlFromFile("kpiAppsFromAppsDB.sql");
+    #Test result
+    for c in query.getColumns():
+        print c
 
-    #Assumption: only the first query in the file is interesting
-    query = sqlCommands[0];
+    #Create map with bundleId as key
+    map = query.getDataMap(1)
 
-    rows = queryAppsDB(query);
+    print "Done"
+
+
+def printToFile(rows):
 
     print "Open output file"
     f = open('out.csv', 'wt')
@@ -79,37 +67,10 @@ def runAppsDBQuery():
 
 
 
-def executeScriptsFromFile(filename, cursor):
-
-    # Open and read the file as a single buffer
-    fd = open(filename, 'r')
-    sqlFile = fd.read()
-    fd.close()
-
-    # all SQL commands (split on ';')
-    sqlCommands = sqlFile.split(';')
-
-    results = [];
-    i = 0
-
-    # Execute every command from the input file
-    for command in sqlCommands:
-        # This will skip and report errors
-        # For example, if the tables do not yet exist, this will skip over
-        # the DROP TABLE commands
-        try:
-            cursor.execute(command)
-            results[i] = cursor.fetchall()
-        except mysql.connector.Error, msg:
-            print "Command skipped: ", msg
-
-    return results;
-
-
 
 def main():
     print("Start")
-    runAppsDBQuery();
+    queryAppsDB()
 
 
 main()
