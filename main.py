@@ -1,24 +1,46 @@
 from MySQLDB import MySQLDB
 from MySqlFile import MySqlFile
 from MyQuery import MyQuery
+from MyRedShiftDB import MyRedShiftDB
 
-import psycopg2
+
 import csv
 import sys
 
-def queryBIDB(query):
-    # Connect to RedShift
-    conn_string = ""
-    print "Connecting to database\n        ->%s" % (conn_string)
-    conn = psycopg2.connect(conn_string);
-    cursor = conn.cursor();
-    #Captures Column Names
-    column_names = [];
-    cursor.execute("Select * from dwh.dwh_fact_daily limit 0;");
-    column_names = [desc[0] for desc in cursor.description]
-    all_cols=', '.join([str(x) for x in column_names])
-    print all_cols;
-    conn.close()
+
+def queryBI():
+    bi = MyRedShiftDB('matrix-bi.ck2h68yqtpzh.eu-west-1.redshift.amazonaws.com',
+                      '5439',
+                      'dev',
+                      'matrix',
+                      'Th3r3!sN0Sp00n'
+                      )
+
+    if bi.connect() == False:
+        return
+
+    # Load query from file
+    script = MySqlFile("kpiAppsFromAppsDB.sql")
+    script.load()
+    queryString = script.getCommand(0)
+
+    # Run query
+    query = MyQuery(queryString)
+    query.run(bi.getConnection())
+
+    # Test result
+    for c in query.getColumns():
+        print c
+
+    # Create map with bundleId as key
+    # Next step: allow composite keys
+    map = query.getDataMap(1)
+
+    print "BI Ready"
+    
+    bi.closeCnx()
+
+    return map
 
 
 def queryAppsDB():
@@ -47,9 +69,14 @@ def queryAppsDB():
         print c
 
     #Create map with bundleId as key
+    #Next step: allow composite keys
     map = query.getDataMap(1)
 
-    print "Done"
+    print "AppsDB Ready"
+
+    MySQLDB.closeCnx()
+
+    return map
 
 
 def printToFile(rows):
