@@ -20,12 +20,12 @@ def queryBI():
         return
 
     # Load query from file
-    script = MySqlFile("kpiAppsFromAppsDB.sql")
-    script.load()
-    queryString = script.getCommand(0)
+    # script = MySqlFile("kpiAppsFromAppsDB.sql")
+    # script.load()
+    # queryString = script.getCommand(0)
 
     # Run query
-    query = MyQuery(queryString)
+    query = MyQuery("Select * from dwh.dwh_fact_daily limit 0;")
     query.run(bi.getConnection())
 
     # Test result
@@ -37,7 +37,7 @@ def queryBI():
     map = query.getDataMap(1)
 
     print "BI Ready"
-    
+
     bi.closeCnx()
 
     return map
@@ -97,7 +97,8 @@ def printToFile(rows):
 
 def main():
     print("Start")
-    queryAppsDB()
+    #queryAppsDB()
+    queryBI()
 
 
 main()
