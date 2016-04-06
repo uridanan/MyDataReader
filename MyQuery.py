@@ -28,7 +28,8 @@ class MyQuery:
          #creating a dict of dicts
         datamap = dict()
         c = 0
-        for col in self.columns:
+        for column in self.columns:
+            col = column.lower()
             datamap[col] = dict()
             for row in self.result:
                 #values = row.split(',')
@@ -47,7 +48,8 @@ class MyQuery:
         # creating a dict of dicts
         datamap = dict()
         c = 0
-        for col in self.columns:
+        for column in self.columns:
+            col = column.lower()
             datamap[col] = dict()
             for row in self.result:
                 # values = row.split(',')
