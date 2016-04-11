@@ -12,21 +12,16 @@ import csv
 
 
 #TODO
+#refactor
+#Mock data
+#Tests
 #Prepare for distribution
-#Add unit tests
-#Use config files
 #Use decorators
+
+#LINKS
 #Use *args for arbitrary arg list https://docs.python.org/3.3/tutorial/controlflow.html#tut-unpacking-arguments
 #Data structures in python https://docs.python.org/3.3/tutorial/datastructures.html
 #Use Pandas.dataframe http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html
-
-#TODO
-#import from config
-#add conditions
-#refactor
-#Arbitrary args
-#Mock data
-#Tests
 
 
 
@@ -194,7 +189,7 @@ def exportcolumns2csv(filename, map, columns):
                     value = row[c].encode('UTF8')
                 else:
                     value = str(row[c]).encode('UTF8')
-                values.append(value)
+                values.append(doublequote(value))
             line = coma.join(values)
             writeln(f,line)
 
@@ -204,16 +199,24 @@ def exportcolumns2csv(filename, map, columns):
         f.close()
         print "Close output file"
 
+
+def wrap(char, string):
+    return char + string + char
+
+
+def doublequote(string):
+    return wrap('"',string)
+
+
 def main():
     print("Start")
 
     # Title
     # BundleId
     # Store
-    # AccountName
+    # Account
     # Platform
-    # Graphical
-    # Engine
+    # Graphical Engine
     # Studio
     # Orientation
     # SDK
@@ -232,8 +235,11 @@ def main():
 
     merge = join(bi,appsDB)
     r2c = transpose(merge)
-    export2csv('out.csv', r2c)
-    #exportcolumns2csv('out.csv',r2c,['title','bundleid','store','accountname','banners_avg_daily_imp'])
+    #export2csv('out.csv', r2c)
+    exportcolumns2csv('out.csv',r2c,['title', 'bundleid', 'store', 'account', 'platform',
+                                     'graphical engine', 'studio', 'orientation',
+                                     'sdk', 'psdk', 'update', 'initialrelease',
+                                     'banners_avg_daily_imp', 'inter_avg_daily_imp', 'rv_avg_daily_imp'])
 
 
 main()
