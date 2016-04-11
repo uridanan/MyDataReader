@@ -68,9 +68,8 @@ def getBIData():
     for c in query.getColumns():
         print c
 
-    # Create map with bundleId as key
-    # Next step: allow composite keys
-    map = query.getDataMap("1,2")
+    #Concatenate columns 1 & 2 to create the key
+    map = query.getMap(1,2)
 
     print "BI Ready"
 
@@ -108,9 +107,8 @@ def getAppsDBData():
     for c in query.getColumns():
         print c
 
-    #Create map with bundleId as key
-    #Next step: allow composite keys
-    map = query.getDataMap("1,2")
+    #Concatenate columns 1 & 2 to create the key
+    map = query.getMap(1,2)
 
     print "AppsDB Ready"
 

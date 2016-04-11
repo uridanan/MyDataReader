@@ -24,22 +24,7 @@ class MyQuery:
     def getResult(self):
         return self.result
 
-    def getDataMapSingleKey(self,keyIndex):
-         #creating a dict of dicts
-        datamap = dict()
-        c = 0
-        for column in self.columns:
-            col = column.lower()
-            datamap[col] = dict()
-            for row in self.result:
-                #values = row.split(',')
-                values = row
-                key = values[keyIndex]
-                value = values[c]
-                datamap[col][key] = value
-            c += 1
-        return datamap
-
+    #Use a string to pass multiple indices for the key
     def getDataMap(self, keys):
 
         #parse keysString into an array of indices
@@ -55,6 +40,22 @@ class MyQuery:
                 # values = row.split(',')
                 values = row
                 key = self.getCompositeKey(keyIndexList,values)
+                value = values[c]
+                datamap[col][key] = value
+            c += 1
+        return datamap
+
+    #Use arbitrary arguments list to pass multiple indices for the key
+    def getMap(self, *keyIndexList):
+        # creating a dict of dicts
+        datamap = dict()
+        c = 0
+        for column in self.columns:
+            col = column.lower()
+            datamap[col] = dict()
+            for row in self.result:
+                values = row
+                key = self.getCompositeKey(keyIndexList, values)
                 value = values[c]
                 datamap[col][key] = value
             c += 1
