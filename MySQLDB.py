@@ -1,4 +1,4 @@
-from MyDB import MyDB
+from mydb import MyDB
 import mysql.connector
 from mysql.connector import errorcode
 

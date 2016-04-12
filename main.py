@@ -1,7 +1,8 @@
-from MySQLDB import MySQLDB
-from MySqlFile import MySqlFile
-from MyQuery import MyQuery
-from MyRedShiftDB import MyRedShiftDB
+from mysqldb import MySQLDB
+from mysqlfile import MySqlFile
+from myquery import MyQuery
+from myredshiftdb import MyRedShiftDB
+from mydbfactory import mydbfactory
 
 import sys
 import os
@@ -13,6 +14,7 @@ import csv
 
 #TODO
 #refactor
+#Load data from csv
 #Mock data
 #Tests
 #Prepare for distribution
@@ -32,6 +34,38 @@ def loadjsondata(filename):
     with open(filename) as data_file:
         data = json.load(data_file)
     return data
+
+def getMapFromDB(type, configFile, sqlFile, *keys):
+    # Load configuration from file
+    config = loadjsondata(configFile)['config']
+
+    # Get DB connector instance
+    db = mydbfactory().getInstance(type, config)
+
+    if db.connect() == False:
+        return
+
+    # Load query from file
+    script = MySqlFile(sqlFile)
+    script.load()
+    queryString = script.getCommand(0)
+
+    # Run query
+    query = MyQuery(queryString)
+    query.run(db.getConnection())
+
+    # Test result
+    for c in query.getColumns():
+        print c
+
+    #Concatenate columns in *keys to create the key
+    map = query.getMap(keys)
+
+    print "Map Ready"
+
+    db.closeCnx()
+
+    return map
 
 
 def getBIData():

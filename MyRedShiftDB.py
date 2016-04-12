@@ -1,4 +1,4 @@
-from MyDB import MyDB
+from mydb import MyDB
 import psycopg2
 
 class MyRedShiftDB(MyDB):
