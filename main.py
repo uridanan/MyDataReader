@@ -2,7 +2,7 @@ from mysqldb import MySQLDB
 from mysqlfile import MySqlFile
 from myquery import MyQuery
 from myredshiftdb import MyRedShiftDB
-from mydbfactory import mydbfactory
+from mydbfactory import myDBFactory
 
 import sys
 import os

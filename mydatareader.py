@@ -2,7 +2,7 @@ from mysqldb import MySQLDB
 from mysqlfile import MySqlFile
 from myquery import MyQuery
 from myredshiftdb import MyRedShiftDB
-from mydbfactory import mydbfactory
+from mydbfactory import myDBFactory
 
 import sys
 import os
@@ -58,7 +58,8 @@ def getMapFromDB(type, configFile, sqlFile, *keys):
     config = loadjsondata(configFile)['config']
 
     # Get DB connector instance
-    db = mydbfactory().getInstance(type, config)
+    factory = myDBFactory()
+    db = factory.getInstance(type, config)
 
     if db.connect() == False:
         return
@@ -77,14 +78,13 @@ def getMapFromDB(type, configFile, sqlFile, *keys):
         print c
 
     #Concatenate columns in *keys to create the key
-    map = query.getMap(keys)
+    map = query.getMap(*keys)
 
     print "Map Ready"
 
     db.closeCnx()
 
     return map
-
 
 
 def join(left, right):
@@ -98,6 +98,7 @@ def join(left, right):
             result[column] = right[column]
     print "Join Ready"
     return result
+
 
 def transpose(map):
     # Use DataFrames from Pandas?
@@ -114,6 +115,10 @@ def transpose(map):
                 result[row][col] = "Missing Data"
     return result
 
+###################################################################################################
+
+###################################################################################################
+#CSV Import & Export Methods
 
 #Implicitely extract all columns directly from the map when exporting
 def export2csv(filename, map):
@@ -155,47 +160,3 @@ def exportcolumns2csv(filename, map, columns):
         
 ###################################################################################################
 
-
-def getBIData():
-    return getMapFromDB('redshift','bidbconfig.json','avgdailyimpressions.sql',1,2)
-
-
-def getAppsDBData():
-    return getMapFromDB('redshift', 'appsdbconfig.json', 'kpiAppsFromAppsDB.sql', 1, 2)
-
-
-def main():
-    print("Start")
-
-    # Title
-    # BundleId
-    # Store
-    # Account
-    # Platform
-    # Graphical Engine
-    # Studio
-    # Orientation
-    # SDK
-    # PSDK
-    # Update
-    # InitialRelease
-    appsDB = getAppsDBData()
-
-    # title
-    # bundleid
-    # store
-    # banners_avg_daily_imp
-    # inter_avg_daily_imp
-    # rv_avg_daily_imp
-    bi = getBIData()
-
-    merge = join(bi,appsDB)
-    r2c = transpose(merge)
-    #export2csv('out.csv', r2c)
-    exportcolumns2csv('out.csv',r2c,['title', 'bundleid', 'store', 'account', 'platform',
-                                     'graphical engine', 'studio', 'orientation',
-                                     'sdk', 'psdk', 'update', 'initialrelease',
-                                     'banners_avg_daily_imp', 'inter_avg_daily_imp', 'rv_avg_daily_imp'])
-
-
-main()

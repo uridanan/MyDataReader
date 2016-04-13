@@ -1,8 +1,9 @@
 from mysqldb import MySQLDB
 from myredshiftdb import MyRedShiftDB
 
-def mydbfactory():
-    def getInstance(type, config):
+class myDBFactory():
+
+    def getInstance(self, type, config):
         switch = {
             'mysql': MySQLDB(
                 config['host'],
