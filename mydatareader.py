@@ -157,6 +157,45 @@ def exportcolumns2csv(filename, map, columns):
     finally:
         f.close()
         print "Close output file"
+
+#Load csv from file
+def importcsv(filename, headers): #, restkey, restval, keyindexlist):
+
+    #Create empty two dimensional dictionary
+    map = dict()
+    for h in headers:
+        map[h] = dict()
+
+    #Open csv file with dict reader
+    with open(filename) as csvfile:
+        reader = csv.DictReader(csvfile) #, headers, restKey, restVal)
+
+    #Fill the dict assuming the first row does not contain headers
+    for row in reader:
+        for h in headers:
+                map[h][key] = row[h]
+
+        print(row['first_name'], row['last_name'])
+    #
+    # #If headers not provided, assume first row contains headers
+    # if headers.len == 0:
+
+    #Close csv file
+    csvfile.close()
+
+    print "Import from CSV Complete: " + filename
+
+    return map
+
+def extractheaders(row):
+    headers = list()
+    for value in row.itervalues():
+        headers.append(value)
+    return headers
+
+
+
+
         
 ###################################################################################################
 

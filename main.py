@@ -40,7 +40,7 @@ def getMapFromDB(type, configFile, sqlFile, *keys):
     config = loadjsondata(configFile)['config']
 
     # Get DB connector instance
-    db = mydbfactory().getInstance(type, config)
+    db = myDBFactory().getInstance(type, config)
 
     if db.connect() == False:
         return
@@ -241,39 +241,12 @@ def wrap(char, string):
 def doublequote(string):
     return wrap('"',string)
 
+import mydatareader
+
 
 def main():
     print("Start")
-
-    # Title
-    # BundleId
-    # Store
-    # Account
-    # Platform
-    # Graphical Engine
-    # Studio
-    # Orientation
-    # SDK
-    # PSDK
-    # Update
-    # InitialRelease
-    appsDB = getAppsDBData()
-
-    # title
-    # bundleid
-    # store
-    # banners_avg_daily_imp
-    # inter_avg_daily_imp
-    # rv_avg_daily_imp
-    bi = getBIData()
-
-    merge = join(bi,appsDB)
-    r2c = transpose(merge)
-    #export2csv('out.csv', r2c)
-    exportcolumns2csv('out.csv',r2c,['title', 'bundleid', 'store', 'account', 'platform',
-                                     'graphical engine', 'studio', 'orientation',
-                                     'sdk', 'psdk', 'update', 'initialrelease',
-                                     'banners_avg_daily_imp', 'inter_avg_daily_imp', 'rv_avg_daily_imp'])
+    mydatareader.importcsv('out.csv')
 
 
 main()
