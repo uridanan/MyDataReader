@@ -6,7 +6,7 @@ from mydbfactory import myDBFactory
 
 import sys
 import os
-import six
+#import six
 import json
 import csv
 
@@ -56,12 +56,12 @@ def getMapFromDB(type, configFile, sqlFile, *keys):
 
     # Test result
     for c in query.getColumns():
-        print c
+        print (c)
 
     #Concatenate columns in *keys to create the key
     map = query.getMap(keys)
 
-    print "Map Ready"
+    print ("Map Ready")
 
     db.closeCnx()
 
@@ -95,12 +95,12 @@ def getBIData():
 
     # Test result
     for c in query.getColumns():
-        print c
+        print (c)
 
     #Concatenate columns 1 & 2 to create the key
     map = query.getMap(1,2)
 
-    print "BI Ready"
+    print ("BI Ready")
 
     bi.closeCnx()
 
@@ -134,12 +134,12 @@ def getAppsDBData():
 
     #Test result
     for c in query.getColumns():
-        print c
+        print (c)
 
     #Concatenate columns 1 & 2 to create the key
     map = query.getMap(1,2)
 
-    print "AppsDB Ready"
+    print ("AppsDB Ready")
 
     appsDB.closeCnx()
 
@@ -148,7 +148,7 @@ def getAppsDBData():
 
 def printToFile(rows):
 
-    print "Open output file"
+    print ("Open output file")
     f = open('out.csv', 'wt')
     try:
         #writer = csv.writer(f)
@@ -157,7 +157,7 @@ def printToFile(rows):
             f.write(str(row))
     finally:
         f.close()
-    print "Close output file"
+    print ("Close output file")
 
 
 def join(left, right):
@@ -169,7 +169,7 @@ def join(left, right):
             result[column].update(right[column])
         else:
             result[column] = right[column]
-    print "Join Ready"
+    print ("Join Ready")
     return result
 
 def transpose(map):
@@ -205,7 +205,7 @@ def export2csv(filename, map):
 
 #Explicitely specify the columns you want to export and in what order
 def exportcolumns2csv(filename, map, columns):
-    print "Open output file"
+    print ("Open output file")
     f = open(filename, 'wt')
     try:
         #Write headers
@@ -231,7 +231,7 @@ def exportcolumns2csv(filename, map, columns):
         print(err)
     finally:
         f.close()
-        print "Close output file"
+        print ("Close output file")
 
 
 def wrap(char, string):
@@ -246,7 +246,7 @@ import mydatareader
 
 def main():
     print("Start")
-    mydatareader.importcsv('out.csv')
+    mydatareader.importcsv('in.csv')
 
 
 main()

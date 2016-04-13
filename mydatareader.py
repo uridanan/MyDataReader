@@ -75,12 +75,12 @@ def getMapFromDB(type, configFile, sqlFile, *keys):
 
     # Test result
     for c in query.getColumns():
-        print c
+        print (c)
 
     #Concatenate columns in *keys to create the key
     map = query.getMap(*keys)
 
-    print "Map Ready"
+    print ("Map Ready")
 
     db.closeCnx()
 
@@ -96,7 +96,7 @@ def join(left, right):
             result[column].update(right[column])
         else:
             result[column] = right[column]
-    print "Join Ready"
+    print ("Join Ready")
     return result
 
 
@@ -130,7 +130,7 @@ def export2csv(filename, map):
 
 #Explicitely specify the columns you want to export and in what order
 def exportcolumns2csv(filename, map, columns):
-    print "Open output file"
+    print ("Open output file")
     f = open(filename, 'wt')
     try:
         #Write headers
@@ -156,45 +156,7 @@ def exportcolumns2csv(filename, map, columns):
         print(err)
     finally:
         f.close()
-        print "Close output file"
-
-#Load csv from file
-def importcsv(filename, headers): #, restkey, restval, keyindexlist):
-
-    #Create empty two dimensional dictionary
-    map = dict()
-    for h in headers:
-        map[h] = dict()
-
-    #Open csv file with dict reader
-    with open(filename) as csvfile:
-        reader = csv.DictReader(csvfile) #, headers, restKey, restVal)
-
-    #Fill the dict assuming the first row does not contain headers
-    for row in reader:
-        for h in headers:
-                map[h][key] = row[h]
-
-        print(row['first_name'], row['last_name'])
-    #
-    # #If headers not provided, assume first row contains headers
-    # if headers.len == 0:
-
-    #Close csv file
-    csvfile.close()
-
-    print "Import from CSV Complete: " + filename
-
-    return map
-
-def extractheaders(row):
-    headers = list()
-    for value in row.itervalues():
-        headers.append(value)
-    return headers
-
-
-
+        print ("Close output file")
 
         
 ###################################################################################################
