@@ -1,20 +1,11 @@
-from mysqldb import MySQLDB
 from mysqlfile import MySqlFile
 from myquery import MyQuery
-from myredshiftdb import MyRedShiftDB
 from mydbfactory import myDBFactory
-
-import sys
-import os
-import six
 import json
-import csv
-
 
 
 #TODO
 #refactor
-#Load data from csv
 #Mock data
 #Tests
 #Prepare for distribution
@@ -33,20 +24,6 @@ def loadjsondata(filename):
     with open(filename) as data_file:
         data = json.load(data_file)
     return data
-
-def writeln(file,string):
-    file.write(string)
-    file.write('\n')
-
-def getfirstentry(map):
-    for entry in map.itervalues():
-        return entry
-
-def wrap(char, string):
-    return char + string + char
-
-def doublequote(string):
-    return wrap('"', string)
 
 ###################################################################################################
 
@@ -115,49 +92,5 @@ def transpose(map):
                 result[row][col] = "Missing Data"
     return result
 
-###################################################################################################
-
-###################################################################################################
-#CSV Import & Export Methods
-
-#Implicitely extract all columns directly from the map when exporting
-def export2csv(filename, map):
-    #Extract column names
-    firstRow = getfirstentry(map)
-    columns = firstRow.keys()
-    #Call the explicit method
-    exportcolumns2csv(filename, map, columns)
-
-#Explicitely specify the columns you want to export and in what order
-def exportcolumns2csv(filename, map, columns):
-    print ("Open output file")
-    f = open(filename, 'wt')
-    try:
-        #Write headers
-        coma = ','
-        headers = coma.join(columns)
-        writeln(f,headers)
-
-        #Write data
-        rows = map.itervalues()
-        for row in rows:
-            values = list()
-            for c in columns:
-                value = ""
-                if isinstance(row[c], six.string_types):
-                    value = row[c].encode('UTF8')
-                else:
-                    value = str(row[c]).encode('UTF8')
-                values.append(doublequote(value))
-            line = coma.join(values)
-            writeln(f,line)
-
-    except Exception as err:
-        print(err)
-    finally:
-        f.close()
-        print ("Close output file")
-
-        
 ###################################################################################################
 
