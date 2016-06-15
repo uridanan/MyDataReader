@@ -5,7 +5,6 @@ import json
 
 
 #TODO
-#refactor
 #Mock data
 #Tests
 #Prepare for distribution

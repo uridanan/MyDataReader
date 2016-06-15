@@ -64,5 +64,7 @@ class MyQuery:
     def getCompositeKey(self, keys, values):
         key =  ""
         for i in keys:
-            key = key + values[int(i)]
+            v = values[int(i)]
+            if v is None: v = ""
+            key = key + v
         return key

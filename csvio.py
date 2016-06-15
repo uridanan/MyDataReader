@@ -15,12 +15,17 @@ def export2csv(filename, map):
 
 #Explicitely specify the columns you want to export and in what order
 def exportcolumns2csv(filename, map, columns):
+    return exportcolumns2csvheaders(filename, map, columns, columns)
+
+
+#Explicitely specify and rename the columns you want to export and in what order
+def exportcolumns2csvheaders(filename, map, columns, rename):
     print ("Open output file")
     f = open(filename, 'wt')
     try:
         #Write headers
         coma = ','
-        headers = coma.join(columns)
+        headers = coma.join(rename)
         writeln(f,headers)
 
         #Write data
@@ -42,6 +47,7 @@ def exportcolumns2csv(filename, map, columns):
     finally:
         f.close()
         print ("Close output file")
+
 
 
 #Support Methods
