@@ -127,7 +127,8 @@ def csvreader2map(reader, headers, keyindexlist):
 
 def extractheaders(reader):
     for row in reader:
-        return row
+        clean_row = [w.replace('\xef\xbb\xbf', '').strip('\"') for w in row]
+        return clean_row
 
 def getCompositeKey(keys, values):
     key = ""
