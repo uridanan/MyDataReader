@@ -1,5 +1,6 @@
-from mydb import MyDB
+from MyDB import MyDB
 import psycopg2
+
 
 class MyRedShiftDB(MyDB):
 
@@ -11,7 +12,7 @@ class MyRedShiftDB(MyDB):
 
     def connect(self):
         conn_string = self.getConnectionString()
-        print "Connecting to database\n        ->%s" % (conn_string)
+        print("Connecting to database\n        ->%s" % (conn_string))
 
         try:
             self.cnx = psycopg2.connect(conn_string)

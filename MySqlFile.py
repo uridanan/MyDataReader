@@ -14,7 +14,7 @@ class MySqlFile:
             self.sqlCommands = fd.read().split(';')
             fd.close()
         except IOError as err:
-            print err
+            print(err)
 
     def getcommands(self):
         return self.sqlCommands
@@ -23,4 +23,4 @@ class MySqlFile:
         try:
             return self.sqlCommands[index]
         except LookupError as err:
-            print err
+            print(err)

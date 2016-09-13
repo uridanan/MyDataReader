@@ -1,5 +1,5 @@
-from mysqlfile import MySqlFile
-from myquery import MyQuery
+from MySqlFile import MySqlFile
+from MyQuery import MyQuery
 from mydbfactory import myDBFactory
 import json
 

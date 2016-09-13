@@ -1,5 +1,5 @@
-from mysqldb import MySQLDB
-from myredshiftdb import MyRedShiftDB
+from MySQLDB import MySQLDB
+from MyRedShiftDB import MyRedShiftDB
 
 class myDBFactory():
 
