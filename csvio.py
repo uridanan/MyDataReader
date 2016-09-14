@@ -29,15 +29,16 @@ def exportcolumns2csvheaders(filename, map, columns, rename):
         writeln(f,headers)
 
         #Write data
-        rows = map.itervalues()
+        rows = map.values()
         for row in rows:
             values = list()
             for c in columns:
                 value = ""
                 if isinstance(row[c], six.string_types):
-                    value = row[c].encode('UTF8')
+                    value = row[c].encode('UTF8').decode("utf-8")
                 else:
-                    value = str(row[c]).encode('UTF8')
+                    #value = str(row[c],'utf-8')
+                    value = str(row[c]).encode('UTF8').decode("utf-8")
                 values.append(doublequote(value))
             line = coma.join(values)
             writeln(f,line)

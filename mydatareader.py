@@ -68,7 +68,7 @@ def join(left, right):
     # If both maps have the same column, that column will be merged with precedence to right
     result = left.copy()
     for column in right.keys():
-        if result.has_key(column):
+        if column in result.keys():
             result[column].update(right[column])
         else:
             result[column] = right[column]
@@ -79,8 +79,8 @@ def join(left, right):
 def transpose(map):
     # Use DataFrames from Pandas?
     result = dict()
-    columns = map.keys()
-    firstColumn = columns.__getitem__(0)
+    columns = list(map.keys())
+    firstColumn = columns[0]
     rows = map[firstColumn].keys()
     for row in rows:
         result[row] = dict()
