@@ -26,6 +26,37 @@ def loadjsondata(filename):
 
 ###################################################################################################
 
+def getDataFromDB(type, configFile, sqlFile):
+    # Load configuration from file
+    config = loadjsondata(configFile)['config']
+
+    # Get DB connector instance
+    factory = myDBFactory()
+    db = factory.getInstance(type, config)
+
+    if db.connect() == False:
+        return
+
+    # Load query from file
+    script = MySqlFile(sqlFile)
+    script.load()
+    queryString = script.getCommand(0)
+
+    # Run query
+    query = MyQuery(queryString)
+    query.run(db.getConnection())
+
+    # Test result
+    for c in query.getColumns():
+        print (c)
+
+    # Close connection
+    db.closeCnx()
+
+    # Return result set
+    return query.getResult()
+
+
 ###################################################################################################
 #Map Manipulation methods
 
