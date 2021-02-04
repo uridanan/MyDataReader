@@ -1,5 +1,5 @@
 from MyDB import MyDB
-import MySQLdb
+import pymysql
 
 class MySQLDB(MyDB):
 
@@ -17,8 +17,8 @@ class MySQLDB(MyDB):
     def connect(self):
         config = self.getConnectionString()
         try:
-            self.cnx = MySQLdb.connect(**config)
-        except MySQLdb.Error as err:
+            self.cnx = pymysql.connect(**config)
+        except pymysql.Error as err:
             print(err)
         else:
             return True
